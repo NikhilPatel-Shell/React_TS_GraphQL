@@ -24,6 +24,20 @@ async function feed(parent, args, context, info) {
   };
 }
 
+async function link(parent, args, context, info) {
+  const link = await context.prisma.link.findUnique({
+    where: {
+      id: Number(args.id),
+    },
+  });
+
+  if (!link) {
+    throw new Error('No such user found');
+  }
+  return link
+}
+
 module.exports = {
-  feed
+  feed,
+  link
 };
