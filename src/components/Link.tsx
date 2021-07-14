@@ -35,7 +35,12 @@ const Link = (props: { link: LinkObj, index: number }) => {
     },
     update(cache, { data: { vote } }) {
       const { feed }: any = cache.readQuery({
-        query: FEED_QUERY
+        query: FEED_QUERY,
+        variables: {
+          take,
+          skip,
+          orderBy
+        }
       });
 
       const updatedLinks = feed.links.map((feedLink: LinkObj) => {
@@ -54,6 +59,11 @@ const Link = (props: { link: LinkObj, index: number }) => {
           feed: {
             links: updatedLinks
           }
+        },
+        variables: {
+          take,
+          skip,
+          orderBy
         }
       });
     }

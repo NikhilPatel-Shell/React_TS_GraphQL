@@ -7,8 +7,12 @@ import { useHistory } from 'react-router';
 
 
 export const FEED_QUERY = gql`
-  {
-    feed {
+  query FeedQuery(
+    $take: Int
+    $skip: Int
+    $orderBy: LinkOrderByInput
+  ){
+    feed(take: $take, skip: $skip, orderBy: $orderBy)  {
       id
       links {
         id
@@ -26,6 +30,7 @@ export const FEED_QUERY = gql`
           }
         }
       }
+      count
     }
   }
 `;
@@ -91,13 +96,15 @@ const LinkList = () => {
   
   const isNewPage = history.location.pathname.includes(
     'new'
-    );
+  );
+
   const pageIndexParams = history.location.pathname.split(
     '/'
-    );
+  );
+
   const page = parseInt(
     pageIndexParams[pageIndexParams.length - 1]
-    );
+  );
         
   const {
     data,
@@ -136,16 +143,63 @@ const LinkList = () => {
     document: NEW_VOTES_SUBSCRIPTION
   });
   
+  const getLinksToRender = (isNewPage: boolean, data: any) => {
+    if (isNewPage) {
+      return data.feed.links;
+    }
+    const rankedLinks = data.feed.links.slice();
+    rankedLinks.sort(
+      (l1: any, l2: any) => l2.votes.length - l1.votes.length
+    );
+    return rankedLinks;
+  };
+
   return (
-    <div>
-    {data && (
       <>
-        {data.feed.links.map((link: LinkObj, index: number) => (
-          <Link key={link.id.toString()} link={link} index={index} />
-        ))}
+        {loading && <p>Loading...</p>}
+        {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
+        {data && (
+          <>
+            {getLinksToRender(isNewPage, data).map(
+              (link: LinkObj, index: number) => (
+                <Link
+                  key={link.id.toString()}
+                  link={link}
+                  index={index + pageIndex}
+                />
+              )
+            )}
+            {isNewPage && (
+              <div className="flex ml4 mv3 gray">
+                <div
+                  className="pointer mr2"
+                  onClick={() => {
+                    if (page > 1) {
+                      history.push(`/new/${page - 1}`);
+                    }
+                  }}
+                >
+                  Previous
+                </div>
+                <div
+                  className="pointer"
+                  onClick={() => {
+                    if (
+                      page <=
+                      data.feed.count / LINKS_PER_PAGE
+                    ) {
+                      const nextPage = page + 1;
+                      history.push(`/new/${nextPage}`);
+                    }
+                  }}
+                >
+                  Next
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </>
-    )}
-    </div>
   );
 };
 
