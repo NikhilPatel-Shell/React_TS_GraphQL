@@ -32,7 +32,7 @@ async function link(parent, args, context, info) {
   });
 
   if (!link) {
-    throw new Error('No such user found');
+    throw new Error('No such link found');
   }
   return link
 }
