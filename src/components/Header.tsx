@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
-        <div className="fw7 mr1">Hacker News</div>
+        <div className="fw7 mr1">Tapup Demo</div>
         <Link to="/" className="ml1 no-underline black">
           new
         </Link>
@@ -21,17 +21,17 @@ const Header = () => {
         <Link to="/top" className="ml1 no-underline black">
           top
         </Link>
-        {authToken && (
+        {/* {authToken && ( */}
           <div className="flex">
             <div className="ml1">|</div>
             <Link
               to="/create"
               className="ml1 no-underline black"
             >
-              submit
+              create
             </Link>
           </div>
-        )}
+        {/* )} */}
       </div>
       <div className="flex flex-fixed">
         {authToken ? (

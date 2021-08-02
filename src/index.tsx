@@ -25,7 +25,7 @@ import { AUTH_TOKEN } from './constants';
 
 // 2
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
+  uri: 'http://13.74.23.108/graphql'
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -42,7 +42,7 @@ const authLink = setContext((_, { headers }) => {
 // -----------------------------------  configuration for continues connection with server for subscription  ---------------------------
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://13.74.23.108:4000/graphql`,
   options: {
     reconnect: true,
     connectionParams: {
@@ -66,7 +66,7 @@ const link = split(
 // 3
 const client = new ApolloClient({
   link: link,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 // 4

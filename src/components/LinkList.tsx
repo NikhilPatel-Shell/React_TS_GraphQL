@@ -1,36 +1,24 @@
 import React from 'react';
 import Link from './Link';
 import { useQuery, gql } from '@apollo/client';
-import { LinkObj, LINKS_PER_PAGE } from '../constants';
+import { CustomerObj, LINKS_PER_PAGE } from '../constants';
 import { useHistory } from 'react-router';
 
 
 
-export const FEED_QUERY = gql`
+export const CUSTOMER_QUERY = gql`
   query FeedQuery(
-    $take: Int
+    $limit: Int
     $skip: Int
-    $orderBy: LinkOrderByInput
   ){
-    feed(take: $take, skip: $skip, orderBy: $orderBy)  {
+    customers(limit: $limit, skip: $skip)  {
       id
-      links {
-        id
-        createdAt
-        url
-        description
-        postedBy {
-          id
-          name
-        }
-        votes {
-          id
-          user {
-            id
-          }
-        }
-      }
-      count
+      contact_name
+      contact_email
+      company_name
+      contact_phone
+      createdAt
+      country
     }
   }
 `;
@@ -86,9 +74,8 @@ const NEW_VOTES_SUBSCRIPTION = gql`
 
 const getQueryVariables = (isNewPage: boolean, page: number): Object => {
   const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
-  const take = isNewPage ? LINKS_PER_PAGE : 100;
-  const orderBy = { createdAt: 'desc' };
-  return { take, skip, orderBy };
+  const limit = isNewPage ? LINKS_PER_PAGE : 100;
+  return { limit, skip };
 };
 
 const LinkList = () => {
@@ -111,7 +98,7 @@ const LinkList = () => {
     loading,
     error,
     subscribeToMore
-  } = useQuery(FEED_QUERY, {
+  } = useQuery(CUSTOMER_QUERY, {
     variables: getQueryVariables(isNewPage, page)
   });
 
@@ -143,58 +130,50 @@ const LinkList = () => {
     document: NEW_VOTES_SUBSCRIPTION
   });
   
-  const getLinksToRender = (isNewPage: boolean, data: any) => {
-    if (isNewPage) {
-      return data.feed.links;
-    }
-    const rankedLinks = data.feed.links.slice();
-    rankedLinks.sort(
-      (l1: any, l2: any) => l2.votes.length - l1.votes.length
-    );
-    return rankedLinks;
-  };
 
   return (
       <>
         {loading && <p>Loading...</p>}
         {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
-        {data && (
+        {data?.customers && (
           <>
-            {getLinksToRender(isNewPage, data).map(
-              (link: LinkObj, index: number) => (
+            {data?.customers.map(
+              (cust: CustomerObj, index: number) => (
                 <Link
-                  key={link.id.toString()}
-                  link={link}
+                  key={cust.id.toString()}
+                  link={cust}
                   index={index + pageIndex}
                 />
               )
             )}
             {isNewPage && (
               <div className="flex ml4 mv3 gray">
-                <div
-                  className="pointer mr2"
-                  onClick={() => {
-                    if (page > 1) {
-                      history.push(`/new/${page - 1}`);
-                    }
-                  }}
-                >
-                  Previous
-                </div>
-                <div
-                  className="pointer"
-                  onClick={() => {
-                    if (
-                      page <=
-                      data.feed.count / LINKS_PER_PAGE
-                    ) {
-                      const nextPage = page + 1;
-                      history.push(`/new/${nextPage}`);
-                    }
-                  }}
-                >
-                  Next
-                </div>
+                {
+                  page > 1 && 
+                  <div
+                    className="pointer mr2"
+                    onClick={() => {
+                      history.push(`/new/${page - 1}`);  
+                    }}
+                  >
+                    Previous
+                  </div>
+                }
+                {
+                  page < (25 / LINKS_PER_PAGE) &&
+                  <div
+                    className="pointer"
+                    onClick={() => {
+                  
+                        const nextPage = page + 1;
+                        history.push(`/new/${nextPage}`);
+                      
+                    }}
+                  >
+                    Next
+                  </div>
+                }
+                
               </div>
             )}
           </>
