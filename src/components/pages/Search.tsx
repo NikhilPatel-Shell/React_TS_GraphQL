@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import Link from './Link';
-import { CustomerObj } from '../constants';
+import Customer from './Customer';
+import { CustomerObj } from '../../constants';
 
 const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String!) {
@@ -41,7 +41,7 @@ const Search = () => {
           type="text"
           onChange={(e) => setSearchFilter(e.target.value)}
         />
-         <button
+        <button
           onClick={() =>
             executeSearch({
               variables: { filter: searchFilter }
@@ -53,7 +53,7 @@ const Search = () => {
       </div>
       {data &&
         data.feed.links.map((link: CustomerObj, index: number) => (
-          <Link key={link.id} link={link} index={index} />
+          <Customer key={link.id} link={link} index={index} />
         ))}
     </>
   );

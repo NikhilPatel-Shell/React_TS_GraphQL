@@ -1,38 +1,45 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import CreateLink from './CreateLink';
-import Header from './Header';
-import LinkList from './LinkList';
-import Search from './Search';
-import Login from './Login';
+import Header from './layouts/Header';
+import Sidebar from './layouts/Sidebar';
+import CustomerList from './pages/CustomerList';
+import CreateCustomer from './pages/CreateCustomer';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   return (
-    <div className="center w85">
+    <>
       <Header />
-      <div className="ph3 pv1 background-gray">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => <Redirect to="/new/1" />}
-          />
-          <Route
-            exact
-            path="/create"
-            component={CreateLink}
-          />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/search" component={Search} />
-          <Route exact path="/top" component={LinkList} />
-          <Route
-            exact
-            path="/new/:page"
-            component={LinkList}
-          />
-        </Switch>
+      <div className="container-fluid">
+        <div className="row">
+          <Sidebar />
+          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={() => <Redirect to="/dashboard" />}
+              />
+              <Route
+                exact
+                path="/dashboard"
+                component={Dashboard}
+              />
+              <Route
+                exact
+                path="/customers/create"
+                component={CreateCustomer}
+              />
+              <Route
+                exact
+                path="/customers"
+                component={CustomerList}
+              />
+            </Switch>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

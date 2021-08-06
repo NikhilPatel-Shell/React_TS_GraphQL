@@ -1,0 +1,19 @@
+query CustomerList(
+    $limit: Int
+    $skip: Int
+  ){
+    customers(limit: $limit, skip: $skip)  {
+      id
+      contact_name
+      contact_email
+      contact_phone
+      company_name
+      invoice_type
+      country
+      state
+      city
+      postal
+      createdAt
+      updatedAt
+    }
+  }

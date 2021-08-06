@@ -1,0 +1,49 @@
+mutation AddCustomer(
+  $adder_per_gallon: String
+  $address1: String
+  $address2: String
+  $city: String
+  $company_name: String
+  $contact_email: String
+  $contact_name: String
+  $contact_phone: String
+  $country: String
+  $createdAt: String
+  $discount_per_gallon: String
+  $fuel_price_per_gallon: String
+  $fuel_price_tax_rate: String
+  $fuel_price_type: String
+  $id: ID!
+  $invoice_type: String
+  $postal: String
+  $state: String
+  $updatedAt: String
+){
+  addCustomer(
+    input: {
+      adder_per_gallon: $adder_per_gallon,
+      address1: $address1,
+      address2: $address2,
+      city: $city,
+      company_name: $company_name,
+      contact_email: $contact_email,
+      contact_name: $contact_name,
+      contact_phone: $contact_phone,
+      country: $country,
+      createdAt: $createdAt,
+      discount_per_gallon: $discount_per_gallon,
+      fuel_price_per_gallon: $fuel_price_per_gallon,
+      fuel_price_tax_rate: $fuel_price_tax_rate,
+      fuel_price_type: $fuel_price_type,
+      id: $id,
+      invoice_type: $invoice_type,
+      postal: $postal,
+      state: $state,
+      updatedAt: $updatedAt, 
+    }
+  ){
+    id,
+    contact_email,
+    contact_name
+  }
+}

@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import './styles/index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import './styles/index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -17,7 +18,7 @@ import {
 
 // for subscription 
 import { split } from '@apollo/client';
-import { WebSocketLink } from '@apollo/client/link/ws';
+// import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 import { setContext } from "@apollo/client/link/context";
@@ -41,40 +42,54 @@ const authLink = setContext((_, { headers }) => {
 
 // -----------------------------------  configuration for continues connection with server for subscription  ---------------------------
 
-const wsLink = new WebSocketLink({
-  uri: `ws://13.74.23.108:4000/graphql`,
-  options: {
-    reconnect: true,
-    connectionParams: {
-      authToken: localStorage.getItem(AUTH_TOKEN)
-    }
-  }
-});
+// const wsLink = new WebSocketLink({
+//   uri: `ws://13.74.23.108:4000/graphql`,
+//   options: {
+//     reconnect: true,
+//     connectionParams: {
+//       authToken: localStorage.getItem(AUTH_TOKEN)
+//     }
+//   }
+// });
 
 const link = split(
   ({ query }) => {
-    const { kind, operation }: any = getMainDefinition(query);
+    const { kind, /* operation */ }: any = getMainDefinition(query);
     return (
-      kind === 'OperationDefinition' &&
-      operation === 'subscription'
+      kind === 'OperationDefinition'
+      // &&
+      // operation === 'subscription'
     );
   },
-  wsLink,
+  // wsLink,
   authLink.concat(httpLink)
 );
 
 // 3
 const client = new ApolloClient({
   link: link,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          customers: {
+            keyArgs: false,
+            merge(existing = [], incoming) {
+              return [...existing, ...incoming];
+            },
+          }
+        }
+      }
+    }
+  }),
 });
 
 // 4
 ReactDOM.render(
   <BrowserRouter>
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

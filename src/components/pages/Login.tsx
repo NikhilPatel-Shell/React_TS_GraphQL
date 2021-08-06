@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { AUTH_TOKEN } from '../constants';
+import { AUTH_TOKEN } from '../../constants';
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation(
@@ -49,7 +49,7 @@ const Login = () => {
       history.push('/');
     }
   });
-  
+
   const [signup] = useMutation(SIGNUP_MUTATION, {
     variables: {
       name: formState.name,
@@ -107,7 +107,7 @@ const Login = () => {
       <div className="flex mt3">
         <button
           className="pointer mr2 button"
-          onClick={()=>formState.login ? login() : signup()}
+          onClick={() => formState.login ? login() : signup()}
         >
           {formState.login ? 'login' : 'create account'}
         </button>

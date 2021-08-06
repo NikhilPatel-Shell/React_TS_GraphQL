@@ -1,8 +1,8 @@
 import React from 'react';
-import { CustomerObj } from '../constants';
+import { CustomerObj } from '../../constants';
 
 
-const Link = (props: { link: CustomerObj, index: number }) => {
+const Customer = (props: { link: CustomerObj, index: number }) => {
   const { link, index } = props;
 
   return (
@@ -28,5 +28,5 @@ const Link = (props: { link: CustomerObj, index: number }) => {
   );
 };
 
-    
-export default Link;
+
+export default Customer;
