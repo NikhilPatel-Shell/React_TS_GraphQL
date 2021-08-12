@@ -1,18 +1,8 @@
-import { gql, useMutation } from '@apollo/client';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useHistory } from 'react-router';
 import { Col, Form, Label, Row } from 'reactstrap';
 import { useFileUploadMutation } from '../../generated/graphql';
-
-// const uploadFileMut = gql`
-//   mutation FileUpload($file: Upload!){
-//     singleFileUpload(file: $file) {
-//       filename
-//     }
-// }
-// `;
-
 
 const Invoice = () => {
   const history = useHistory();
