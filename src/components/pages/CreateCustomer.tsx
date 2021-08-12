@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Form, FormGroup, Label, Input, FormFeedback, FormText, Row, Col, Button } from 'reactstrap';
+import { Button, Col, Form, FormFeedback, Input, Label, Row } from 'reactstrap';
 import { regex } from '../../constants';
 import { useAddCustomerMutation } from '../../generated/graphql';
 
@@ -28,10 +28,9 @@ const CreateCustomer = () => {
   });
 
   const history = useHistory();
-
-  const [createCustomer] = useAddCustomerMutation({
+  const [createCustomer, { loading }] = useAddCustomerMutation({
     variables: {
-      ...formState
+      input: { ...formState }
     },
     update: (cache, { data }) => {
       console.log("🚀 ~ file: CreateCustomer.tsx ~ line 42 ~ CreateCustomer ~ customers", data)
@@ -57,6 +56,7 @@ const CreateCustomer = () => {
       //   },
       // });
     },
+    onError: (e) => console.log(e),
     onCompleted: () => history.push('/customers')
   });
 
@@ -337,8 +337,9 @@ const CreateCustomer = () => {
             </Input>
           </div>
         </Row>
-
-        <Button type="submit">Create</Button>
+        <div>
+          <Button type="submit" disabled={loading}>{loading ? 'Creating' : 'Create'}</Button>
+        </div>
       </Form>
     </>
   );

@@ -1,0 +1,5 @@
+mutation FileUpload($file: Upload!){
+  singleFileUpload(file: $file){
+    filename,
+  }
+}

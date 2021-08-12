@@ -5,6 +5,7 @@ import Sidebar from './layouts/Sidebar';
 import CustomerList from './pages/CustomerList';
 import CreateCustomer from './pages/CreateCustomer';
 import Dashboard from './pages/Dashboard';
+import Invoice from './pages/Invoice';
 
 const App = () => {
   return (
@@ -34,6 +35,11 @@ const App = () => {
                 exact
                 path="/customers"
                 component={CustomerList}
+              />
+              <Route
+                exact
+                path="/invoice"
+                component={Invoice}
               />
             </Switch>
           </main>

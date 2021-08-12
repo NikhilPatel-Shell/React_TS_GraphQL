@@ -128,29 +128,18 @@ export type AddCustomer = {
 };
 
 export type AddCustomerMutationVariables = Exact<{
-  adder_per_gallon?: Maybe<Scalars['String']>;
-  address1?: Maybe<Scalars['String']>;
-  address2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  company_name?: Maybe<Scalars['String']>;
-  contact_email?: Maybe<Scalars['String']>;
-  contact_name?: Maybe<Scalars['String']>;
-  contact_phone?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['String']>;
-  discount_per_gallon?: Maybe<Scalars['String']>;
-  fuel_price_per_gallon?: Maybe<Scalars['String']>;
-  fuel_price_tax_rate?: Maybe<Scalars['String']>;
-  fuel_price_type?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  invoice_type?: Maybe<Scalars['String']>;
-  postal?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
+  input: AddCustomer;
 }>;
 
 
 export type AddCustomerMutation = { __typename?: 'Mutation', addCustomer: { __typename?: 'Customer', id: string, contact_email?: Maybe<string>, contact_name?: Maybe<string> } };
+
+export type FileUploadMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type FileUploadMutation = { __typename?: 'Mutation', singleFileUpload: { __typename?: 'File', filename: string } };
 
 export type CustomerListQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
@@ -162,10 +151,8 @@ export type CustomerListQuery = { __typename?: 'Query', customers?: Maybe<Array<
 
 
 export const AddCustomerDocument = gql`
-    mutation AddCustomer($adder_per_gallon: String, $address1: String, $address2: String, $city: String, $company_name: String, $contact_email: String, $contact_name: String, $contact_phone: String, $country: String, $createdAt: String, $discount_per_gallon: String, $fuel_price_per_gallon: String, $fuel_price_tax_rate: String, $fuel_price_type: String, $id: ID!, $invoice_type: String, $postal: String, $state: String, $updatedAt: String) {
-  addCustomer(
-    input: {adder_per_gallon: $adder_per_gallon, address1: $address1, address2: $address2, city: $city, company_name: $company_name, contact_email: $contact_email, contact_name: $contact_name, contact_phone: $contact_phone, country: $country, createdAt: $createdAt, discount_per_gallon: $discount_per_gallon, fuel_price_per_gallon: $fuel_price_per_gallon, fuel_price_tax_rate: $fuel_price_tax_rate, fuel_price_type: $fuel_price_type, id: $id, invoice_type: $invoice_type, postal: $postal, state: $state, updatedAt: $updatedAt}
-  ) {
+    mutation AddCustomer($input: addCustomer!) {
+  addCustomer(input: $input) {
     id
     contact_email
     contact_name
@@ -187,25 +174,7 @@ export type AddCustomerMutationFn = Apollo.MutationFunction<AddCustomerMutation,
  * @example
  * const [addCustomerMutation, { data, loading, error }] = useAddCustomerMutation({
  *   variables: {
- *      adder_per_gallon: // value for 'adder_per_gallon'
- *      address1: // value for 'address1'
- *      address2: // value for 'address2'
- *      city: // value for 'city'
- *      company_name: // value for 'company_name'
- *      contact_email: // value for 'contact_email'
- *      contact_name: // value for 'contact_name'
- *      contact_phone: // value for 'contact_phone'
- *      country: // value for 'country'
- *      createdAt: // value for 'createdAt'
- *      discount_per_gallon: // value for 'discount_per_gallon'
- *      fuel_price_per_gallon: // value for 'fuel_price_per_gallon'
- *      fuel_price_tax_rate: // value for 'fuel_price_tax_rate'
- *      fuel_price_type: // value for 'fuel_price_type'
- *      id: // value for 'id'
- *      invoice_type: // value for 'invoice_type'
- *      postal: // value for 'postal'
- *      state: // value for 'state'
- *      updatedAt: // value for 'updatedAt'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -216,6 +185,39 @@ export function useAddCustomerMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddCustomerMutationHookResult = ReturnType<typeof useAddCustomerMutation>;
 export type AddCustomerMutationResult = Apollo.MutationResult<AddCustomerMutation>;
 export type AddCustomerMutationOptions = Apollo.BaseMutationOptions<AddCustomerMutation, AddCustomerMutationVariables>;
+export const FileUploadDocument = gql`
+    mutation FileUpload($file: Upload!) {
+  singleFileUpload(file: $file) {
+    filename
+  }
+}
+    `;
+export type FileUploadMutationFn = Apollo.MutationFunction<FileUploadMutation, FileUploadMutationVariables>;
+
+/**
+ * __useFileUploadMutation__
+ *
+ * To run a mutation, you first call `useFileUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFileUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fileUploadMutation, { data, loading, error }] = useFileUploadMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useFileUploadMutation(baseOptions?: Apollo.MutationHookOptions<FileUploadMutation, FileUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FileUploadMutation, FileUploadMutationVariables>(FileUploadDocument, options);
+      }
+export type FileUploadMutationHookResult = ReturnType<typeof useFileUploadMutation>;
+export type FileUploadMutationResult = Apollo.MutationResult<FileUploadMutation>;
+export type FileUploadMutationOptions = Apollo.BaseMutationOptions<FileUploadMutation, FileUploadMutationVariables>;
 export const CustomerListDocument = gql`
     query CustomerList($limit: Int, $skip: Int) {
   customers(limit: $limit, skip: $skip) {

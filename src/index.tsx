@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import './styles/index.css';
+import './styles/index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -12,9 +12,11 @@ import reportWebVitals from './reportWebVitals';
 import {
   ApolloProvider,
   ApolloClient,
-  createHttpLink,
+  // createHttpLink,
   InMemoryCache,
 } from '@apollo/client';
+
+import { createUploadLink } from "apollo-upload-client";
 
 // for subscription 
 import { split } from '@apollo/client';
@@ -25,8 +27,13 @@ import { setContext } from "@apollo/client/link/context";
 import { AUTH_TOKEN } from './constants';
 
 // 2
-const httpLink = createHttpLink({
-  uri: 'http://13.74.23.108/graphql'
+// const httpLink = createHttpLink({
+//   uri: 'http://13.74.23.108/graphql'
+// });
+
+const httpLink = createUploadLink({
+  // uri: 'http://13.74.23.108/graphql',
+  uri: 'http://20.105.0.40:5009/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
