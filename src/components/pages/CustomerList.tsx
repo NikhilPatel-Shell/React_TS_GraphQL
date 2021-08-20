@@ -1,14 +1,21 @@
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { LINKS_PER_PAGE } from '../../constants';
+import { useDispatch, useSelector } from "react-redux";
 import { useCustomerListQuery } from "../../generated/graphql";
-
+import { State, actionsCreators } from '../../redux';
+import { bindActionCreators } from 'redux';
 
 const CustomerList = () => {
   const history = useHistory();
   const location = useLocation();
   const [noMoreData, setNoMoreData] = useState(false)
+
+  const dispatch = useDispatch();
+  const { fetchCustomerList } = bindActionCreators(actionsCreators, dispatch)
+  const customerList = useSelector<State, State["customer"]["list"]>(state => state.customer.list)
+
   const { data, loading, error, fetchMore } = useCustomerListQuery({
     variables: {
       limit: LINKS_PER_PAGE,
@@ -16,6 +23,10 @@ const CustomerList = () => {
     },
     notifyOnNetworkStatusChange: true
   })
+
+  useEffect(() => {
+    fetchCustomerList({ limit: LINKS_PER_PAGE, skip: 0 });
+  }, [fetchCustomerList])
 
   return (
     <>
@@ -118,5 +129,13 @@ const CustomerList = () => {
     </>
   );
 };
+
+// const mapStateToProps = (store: State) => ({
+//   List: store.customer,
+// })
+
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+//   loadData: (payload: CustomerListQueryVariables) => dispatch(fetchCustomerList(payload))
+// })
 
 export default CustomerList;
