@@ -1,10 +1,10 @@
 import { takeEvery, put, call, StrictEffect } from "redux-saga/effects";
 import { CustomerListQueryHookResult, CustomerListQueryVariables, useCustomerListQuery } from "../generated/graphql";
 import { ActionTypes } from "../redux/customers/types";
-import { setCustomerList } from "../redux/customers/actions";
+import { setCustomerList, fetchCustomerList } from "../redux/customers/actions";
 
 // watchers
-export default function* customerSaga(): Generator<StrictEffect> {
+export default function* customerSaga(payload: CustomerListQueryVariables): Generator<StrictEffect> {
   yield takeEvery(ActionTypes.GET_CUSTOMER_LIST, getCustomerListWorker);
 }
 
